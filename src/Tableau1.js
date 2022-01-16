@@ -30,10 +30,10 @@ class Tableau1 extends Phaser.Scene{
         //Balle
         this.balle = this.physics.add.image(this.largeur/2,this.hauteur/2,'ball').setOrigin(0,0);
         this.balle.setDisplaySize(20,20);
-        this.balle.body.setBounce(1.1,1.1);
+        this.balle.body.setBounce(1.2,1.2);
         this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
-        this.balle.body.setVelocityY(Phaser.Math.Between(-200,200));
-        this.balle.body.setMaxVelocity(1000,1000);
+        this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
+        this.balle.body.setMaxVelocity(2000,1000);
 
         //Raquette Gauche
         this.gauche=this.physics.add.image(10,this.hauteur/2,'square').setOrigin(0,0);
@@ -49,10 +49,27 @@ class Tableau1 extends Phaser.Scene{
         this.droite.setImmovable(true);
         this.droite.body.setVelocityY(0);
 
+        //Rebonds
         this.physics.add.collider(this.balle,this.bas);
         this.physics.add.collider(this.balle,this.haut);
         this.physics.add.collider(this.balle,this.gauche);
         this.physics.add.collider(this.balle,this.droite);
+
+
+        /**On compte les points sinon on s'emmerde**/
+
+        this.data.set('j1', 0);
+        this.data.set('j2', 0);
+
+        this.J1 = this.add.text(100, 30, '', { font: '40px Courier', fill: '#808080' });
+        this.J1.setText([
+            'J1: ' + this.data.get('j1')
+        ]);
+
+        this.J2 = this.add.text(800, 30, '', { font: '40px Courier', fill: '#808080' });
+        this.J2.setText([
+            'J2: ' + this.data.get('j2')
+        ]);
 
         /**this.gauche.speed=0;
         this.droite.speed=0;
@@ -101,10 +118,18 @@ class Tableau1 extends Phaser.Scene{
 
     update(){
         if(this.balle.x > this.largeur){
-            this.balle.x = 0
+            this.data.values.j1 += 1;
+            this.balle.x = this.largeur/2;
+            this.balle.y = this.hauteur/2;
+            this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
+            this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
         }
         if(this.balle.x < 0){
-            this.balle.x = this.largeur
+            this.data.values.j2 += 1;
+            this.balle.x = this.largeur/2;
+            this.balle.y = this.hauteur/2;
+            this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
+            this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
         }
         if(this.balle.y < 0){
             this.balle.y = 0
