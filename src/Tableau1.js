@@ -40,26 +40,63 @@ class Tableau1 extends Phaser.Scene{
         this.gauche.setDisplaySize(20,100);
         this.gauche.body.setAllowGravity(false);
         this.gauche.setImmovable(true);
+        this.gauche.body.setVelocityY(0);
 
         //Raquette Droite
         this.droite=this.physics.add.image(this.largeur-40,this.hauteur/2,'square').setOrigin(0,0);
         this.droite.setDisplaySize(20,100);
         this.droite.body.setAllowGravity(false);
         this.droite.setImmovable(true);
+        this.droite.body.setVelocityY(0);
 
         this.physics.add.collider(this.balle,this.bas);
         this.physics.add.collider(this.balle,this.haut);
         this.physics.add.collider(this.balle,this.gauche);
         this.physics.add.collider(this.balle,this.droite);
 
+        /**this.gauche.speed=0;
+        this.droite.speed=0;
+        this.gauche.scrollFactorY=1;
+        this.droite.scrollFactorY=1;*/
+
         this.initkeyboard()
 
-        this.gauche.scrollFactorY=0;
-        this.droite.scrollFactorY=0;
     }
 
     initkeyboard(){
-
+        let me=this;
+        this.input.keyboard.on('keydown', function(kevent)
+        {
+            switch (kevent.keyCode)
+            {
+                case Phaser.Input.Keyboard.KeyCodes.A:
+                    me.gauche.body.setVelocityY(-500);
+                    break;
+                case Phaser.Input.Keyboard.KeyCodes.Q:
+                    me.gauche.body.setVelocityY(500);
+                    break;
+                case Phaser.Input.Keyboard.KeyCodes.P:
+                    me.droite.body.setVelocityY(-500);
+                    break;
+                case Phaser.Input.Keyboard.KeyCodes.M:
+                    me.droite.body.setVelocityY(500);
+                    break;
+            }
+        });
+        this.input.keyboard.on('keyup', function(kevent)
+        {
+            switch (kevent.keyCode)
+            {
+                case Phaser.Input.Keyboard.KeyCodes.A:
+                case Phaser.Input.Keyboard.KeyCodes.Q:
+                    me.gauche.body.setVelocityY(0);
+                    break;
+                case Phaser.Input.Keyboard.KeyCodes.P:
+                case Phaser.Input.Keyboard.KeyCodes.M:
+                    me.droite.body.setVelocityY(0);
+                    break;
+            }
+        });
     }
 
     update(){
@@ -75,5 +112,7 @@ class Tableau1 extends Phaser.Scene{
         if(this.balle.y > this.hauteur){
             this.balle.y = this.hauteur
         }
+        /**this.gauche.scrollY=this.gauche.speed;
+        this.droite.scrollY=this.droite.speed;*/
     }
 }
