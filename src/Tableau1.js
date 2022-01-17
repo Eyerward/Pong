@@ -33,7 +33,7 @@ class Tableau1 extends Phaser.Scene{
         this.balle.body.setBounce(1.2,1.2);
         this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
         this.balle.body.setVelocityY(Phaser.Math.Between(-50,50));
-        this.balle.body.setMaxVelocity(2000,1000);
+        this.balle.body.setMaxVelocity(1000,1000);
 
         //Raquette Gauche
         this.gauche=this.physics.add.image(10,this.hauteur/2,'square').setOrigin(0,0);
@@ -161,17 +161,17 @@ class Tableau1 extends Phaser.Scene{
         }
 
         //Debug Raquette
-        if(this.gauche.y < 0){
-            this.gauche.y = 0
+        if(this.gauche.y < 20){
+            this.gauche.y = 20
         }
         if(this.gauche.y > this.hauteur){
             this.gauche.y = this.hauteur
         }
-        if(this.droite.y < 0){
-            this.droite.y = 0
+        if(this.droite.y < 20){
+            this.droite.y = 20
         }
-        if(this.droite.y > this.hauteur){
-            this.droite.y = this.hauteur
+        if(this.droite.y > this.hauteur-120){
+            this.droite.y = this.hauteur-120
         }
     }
 }
