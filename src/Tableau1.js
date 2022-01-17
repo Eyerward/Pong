@@ -32,7 +32,7 @@ class Tableau1 extends Phaser.Scene{
         this.balle.setDisplaySize(20,20);
         this.balle.body.setBounce(1.2,1.2);
         this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
-        this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
+        this.balle.body.setVelocityY(Phaser.Math.Between(-50,50));
         this.balle.body.setMaxVelocity(2000,1000);
 
         //Raquette Gauche
@@ -49,11 +49,19 @@ class Tableau1 extends Phaser.Scene{
         this.droite.setImmovable(true);
         this.droite.body.setVelocityY(0);
 
+        let me = this;
+
         //Rebonds
         this.physics.add.collider(this.balle,this.bas);
         this.physics.add.collider(this.balle,this.haut);
-        this.physics.add.collider(this.balle,this.gauche);
-        this.physics.add.collider(this.balle,this.droite);
+        this.physics.add.collider(this.balle,this.gauche, function() {
+            console.log('touche gauche');
+            me.rebond(me.gauche)
+        });
+        this.physics.add.collider(this.balle,this.droite, function() {
+            console.log('touche droite');
+            me.rebond(me.droite)
+        });
 
 
         /**On compte les points sinon on s'emmerde**/
@@ -78,6 +86,14 @@ class Tableau1 extends Phaser.Scene{
 
         this.initkeyboard()
 
+    }
+
+    rebond(raquette){
+        let me = this;
+
+        console.log(raquette.y);
+        console.log(me.balle.y);
+        console.log(me.balle.y-raquette.y)
     }
 
     initkeyboard(){
@@ -117,27 +133,45 @@ class Tableau1 extends Phaser.Scene{
     }
 
     update(){
+
+        /**Pour la boucle de jeu**/
         if(this.balle.x > this.largeur){
+            console.log('1 POINT POUR J1');
             this.data.values.j1 += 1;
             this.balle.x = this.largeur/2;
             this.balle.y = this.hauteur/2;
-            this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
-            this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
+            this.balle.body.setVelocityX(Phaser.Math.Between(50,200));
+            this.balle.body.setVelocityY(Phaser.Math.Between(0,0));
         }
         if(this.balle.x < 0){
+            console.log('1 POINT POUR J2');
             this.data.values.j2 += 1;
             this.balle.x = this.largeur/2;
             this.balle.y = this.hauteur/2;
-            this.balle.body.setVelocityX(Phaser.Math.Between(-200,200));
-            this.balle.body.setVelocityY(Phaser.Math.Between(-100,100));
+            this.balle.body.setVelocityX(Phaser.Math.Between(-200,-50));
+            this.balle.body.setVelocityY(Phaser.Math.Between(0,0));
         }
+
+        //Debug balle
         if(this.balle.y < 0){
             this.balle.y = 0
         }
         if(this.balle.y > this.hauteur){
             this.balle.y = this.hauteur
         }
-        /**this.gauche.scrollY=this.gauche.speed;
-        this.droite.scrollY=this.droite.speed;*/
+
+        //Debug Raquette
+        if(this.gauche.y < 0){
+            this.gauche.y = 0
+        }
+        if(this.gauche.y > this.hauteur){
+            this.gauche.y = this.hauteur
+        }
+        if(this.droite.y < 0){
+            this.droite.y = 0
+        }
+        if(this.droite.y > this.hauteur){
+            this.droite.y = this.hauteur
+        }
     }
 }
