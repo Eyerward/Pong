@@ -66,34 +66,28 @@ class Tableau1 extends Phaser.Scene{
 
         /**On compte les points sinon on s'emmerde**/
 
-        this.data.set('j1', 0);
-        this.data.set('j2', 0);
+        this.jGauche = new Joueur('P1','jGauche');
+        this.jDroite = new Joueur('P2','jDroite');
 
-        this.J1 = this.add.text(100, 30, '', { font: '40px Courier', fill: '#808080' });
-        this.J1.setText([
-            'J1: ' + this.data.get('j1')
-        ]);
-
-        this.J2 = this.add.text(800, 30, '', { font: '40px Courier', fill: '#808080' });
-        this.J2.setText([
-            'J2: ' + this.data.get('j2')
-        ]);
-
-        /**this.gauche.speed=0;
-        this.droite.speed=0;
-        this.gauche.scrollFactorY=1;
-        this.droite.scrollFactorY=1;*/
 
         this.initkeyboard()
+    }
+
+    rebond(player){
+
+        let hauteurPlayer = player.displayHeight;
+
+        let positionRelativePlayer = (this.balle.y - player.y);
+
+        positionRelativePlayer = (positionRelativePlayer / hauteurPlayer);
+        positionRelativePlayer = positionRelativePlayer*2-1;
+
+        this.balle.setVelocityY(this.balle.body.velocity.y + positionRelativePlayer*50);
 
     }
 
-    rebond(raquette){
-        let me = this;
-
-        console.log(raquette.y);
-        console.log(me.balle.y);
-        console.log(me.balle.y-raquette.y)
+    win(joueur){
+        joueur.score ++;
     }
 
     initkeyboard(){
@@ -132,20 +126,19 @@ class Tableau1 extends Phaser.Scene{
         });
     }
 
+
     update(){
 
         /**Pour la boucle de jeu**/
         if(this.balle.x > this.largeur){
-            console.log('1 POINT POUR J1');
-            this.data.values.j1 += 1;
+            this.win(this.jGauche);
             this.balle.x = this.largeur/2;
             this.balle.y = this.hauteur/2;
             this.balle.body.setVelocityX(Phaser.Math.Between(50,200));
             this.balle.body.setVelocityY(Phaser.Math.Between(0,0));
         }
         if(this.balle.x < 0){
-            console.log('1 POINT POUR J2');
-            this.data.values.j2 += 1;
+            this.win(this.jDroite);
             this.balle.x = this.largeur/2;
             this.balle.y = this.hauteur/2;
             this.balle.body.setVelocityX(Phaser.Math.Between(-200,-50));
@@ -164,8 +157,8 @@ class Tableau1 extends Phaser.Scene{
         if(this.gauche.y < 20){
             this.gauche.y = 20
         }
-        if(this.gauche.y > this.hauteur){
-            this.gauche.y = this.hauteur
+        if(this.gauche.y > this.hauteur-120){
+            this.gauche.y = this.hauteur-120
         }
         if(this.droite.y < 20){
             this.droite.y = 20
